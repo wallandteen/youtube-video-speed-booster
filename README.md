@@ -6,6 +6,7 @@ A userscript that adds playback speeds above 2× on YouTube and extends keyboard
 
 - Adds speed options up to 5× in the player menu
 - Cycle speeds with **Shift+>** and **Shift+<**
+- Displays the current speed as an on-screen toast when using hotkeys
 
 ## Installation
 
