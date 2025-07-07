@@ -19,6 +19,32 @@
         return document.querySelector('video');
     }
 
+    function showToast(rate) {
+        let toast = document.getElementById('yvsb-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'yvsb-toast';
+            toast.style.position = 'absolute';
+            toast.style.left = '50%';
+            toast.style.top = '50%';
+            toast.style.transform = 'translate(-50%, -50%)';
+            toast.style.padding = '8px 14px';
+            toast.style.fontSize = '16px';
+            toast.style.background = 'rgba(0,0,0,0.8)';
+            toast.style.color = '#fff';
+            toast.style.borderRadius = '2px';
+            toast.style.zIndex = '10000';
+            toast.style.pointerEvents = 'none';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = rate + '×';
+        toast.style.display = 'block';
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => {
+            toast.style.display = 'none';
+        }, 800);
+    }
+
     function changeSpeed(direction) {
         const video = getVideo();
         if (!video) return;
@@ -26,8 +52,10 @@
         const index = SPEEDS.indexOf(current);
         const next = index + direction;
         if (next >= 0 && next < SPEEDS.length) {
-            video.playbackRate = SPEEDS[next];
-            updateMenuSelection(SPEEDS[next]);
+            const rate = SPEEDS[next];
+            video.playbackRate = rate;
+            updateMenuSelection(rate);
+            showToast(rate);
         }
     }
 
@@ -70,10 +98,13 @@
                 if (video) {
                     video.playbackRate = speed;
                     updateMenuSelection(speed);
+                    showToast(speed);
                 }
             });
             menu.appendChild(item);
         });
+        const current = getVideo()?.playbackRate;
+        if (current) updateMenuSelection(current);
     }
 
     function observeMenus() {
